@@ -1,0 +1,36 @@
+{
+  "name": "my-maska",
+  "private": false,
+  "version": "0.0.1",
+  "description": "Simple zero-dependency input mask for Vue 2/3 or Vanilla JS",
+  "keywords": [
+    "mask",
+    "inputmask",
+    "vue",
+    "vue3",
+    "vue2"
+  ],
+  "author": "Moshkin Denis",
+  "homepage": "https://beholdr.github.io/maska/",
+  "repository": {
+    "url": "https://github.com/beholdr/maska",
+    "type": "git"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": " vite build --config vite.config.build.ts",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "maska": "^2.1.9",
+    "vue": "^3.2.47"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.4",
+    "@vitejs/plugin-vue": "^4.1.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2",
+    "vue-tsc": "^1.4.2"
+  }
+}
