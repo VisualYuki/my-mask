@@ -11,9 +11,9 @@
     "vue2"
   ],
   "author": "Moshkin Denis",
-  "homepage": "https://beholdr.github.io/maska/",
+  "homepage": "https://github.com/VisualYuki/my-mask",
   "repository": {
-    "url": "https://github.com/beholdr/maska",
+    "url": "https://github.com/VisualYuki/my-mask",
     "type": "git"
   },
   "type": "module",
