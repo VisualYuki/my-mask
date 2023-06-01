@@ -1,7 +1,53 @@
-import { Directive } from "vue";
-import { MaskInput, MaskInputOptions } from "./mask-input";
+import { Directive, DirectiveBinding } from "vue";
+import { MaskInput } from "./mask-input";
 
-const masks = new WeakMap<HTMLInputElement, any>();
+const masks = new WeakMap<HTMLInputElement, MaskInput>();
+
+export const vMyMask: Directive<HTMLElement, maskDetails | undefined> = (
+  el: HTMLElement,
+  binding: DirectiveBinding<maskDetails | undefined>
+) => {
+  const targetInput =
+    el instanceof HTMLInputElement ? el : el.querySelector("input");
+  //const options: MaskInputOptions = { ...(binding.value || {}) }; // get plugin options via vue directive values.
+  const options: MaskInputOptions = {};
+
+  // check errors
+  if (targetInput === null) {
+    console.error("my-mask: not found input element");
+    return;
+  } else if (el.querySelectorAll("input").length > 1) {
+    console.warn("my-mask: inside directive found more than one input");
+  }
+
+  // set callback to update user variables in component.
+  if (binding.value !== undefined) {
+    const binded: maskDetails = binding.value;
+
+    const detailCallback = (detail: maskDetails): void => {
+      binded.mask = detail.mask;
+      binded.unmask = detail.unmask;
+      binded.isCompleted = detail.isCompleted;
+    };
+
+    options.detailCallback = detailCallback;
+  }
+
+  const existed = masks.get(targetInput);
+
+  if (existed === undefined) {
+    masks.set(targetInput, new MaskInput(targetInput, options));
+  }
+
+  //if (existed != null) {
+  //  if (!existed.needUpdateOptions(targetInput, options)) {
+  //    return;
+  //  }
+
+  //  existed.destroy();
+  //}
+};
+
 //const checkValue = (input: HTMLInputElement): void => {
 //  setTimeout(() => {
 //    if (masks.get(input)?.needUpdateValue(input) === true) {
@@ -9,25 +55,4 @@ const masks = new WeakMap<HTMLInputElement, any>();
 //    }
 //  });
 //};
-
-export const vMyMask: Directive = (el: HTMLElement, binding) => {
-  const input = el instanceof HTMLInputElement ? el : el.querySelector("input");
-  //const opts: MaskInputOptions = { ...(binding.arg as any) } || {};
-
-  const rawMask = binding.value;
-
-  if (input === null) {
-    console.warn("Masked-mask: not found input element");
-    return;
-  } else if (el.querySelectorAll("input").length > 1) {
-    console.warn("Masked-mask: inside directive found more than one input");
-  }
-
-  //checkValue(input);
-
-  const existed = masks.get(input);
-
-  if (existed === undefined) {
-    masks.set(input, new MaskInput(input, rawMask));
-  }
-};
+//checkValue(input);

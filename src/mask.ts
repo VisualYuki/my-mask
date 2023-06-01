@@ -1,39 +1,106 @@
 import { tokens } from "./tokens";
 
+interface locMaskOptions extends MaskOptions {
+  tokens: MaskToken;
+}
+
 export class Mask {
-  private readonly memo = new Map();
-  private rawMask = "";
+  private options: locMaskOptions = {
+    mask: "",
+    placeholder: true,
+    tokens: {},
+  };
 
-  constructor(rawMask: string) {
-    this.rawMask = rawMask;
+  constructor(options: MaskOptions) {
+    this.options = { ...this.options, ...options };
+
+    if (options.tokens) {
+      this.options.tokens = { ...options.tokens, ...tokens };
+    } else {
+      this.options.tokens = tokens;
+    }
   }
 
-  masked(value: string): string {
-    return this.process(value);
+  mask(value: string): string {
+    return this.process(value).mask;
   }
 
-  process(value: string): string {
-    let result: string = "";
+  unmask(value: string): string {
+    return this.process(value).unmask;
+  }
 
-    for (let i = 0; i < this.rawMask.length; i++) {
-      let valueChar = value[i] ? value[i] : "";
-      let maskChar: string = this.rawMask[i];
-      let maskPattern = tokens[maskChar] ? tokens[maskChar] : null;
+  isCompleted(value: string): boolean {
+    return this.process(value).isCompleted;
+  }
 
-      let match = valueChar.match(maskPattern);
+  getCursorPosition(value: string): number {
+    return this.process(value).cursorPosition;
+  }
 
-      if (maskPattern === null) {
+  process(value: string): maskDetails {
+    let result: maskDetails = {
+      mask: "",
+      unmask: "",
+      isCompleted: true,
+      cursorPosition: 0,
+    };
+
+    if (!this.options.mask) {
+      result.isCompleted = false;
+      result.mask = value;
+      result.unmask = value;
+      return result;
+    }
+
+    let offset = 0;
+
+    for (let i = 0; i < this.options.mask.length; i++) {
+      let valueChar = value[offset] ? value[offset] : "";
+      let maskChar: string = this.options.mask[i];
+      let maskRegexp = this.options.tokens[maskChar]
+        ? this.options.tokens[maskChar]
+        : null;
+
+      if (
+        valueChar === "" &&
+        this.options.placeholder === false &&
+        maskRegexp
+      ) {
+        break;
+      }
+
+      if (valueChar === maskChar) {
+        offset++;
+      }
+
+      if (maskRegexp === null) {
         valueChar = maskChar;
       } else {
-        if (match !== null && match.length === 1) {
-        } else {
-          if (maskPattern) {
+        let match = valueChar.match(maskRegexp);
+        offset++;
+
+        while (match === null && offset <= value.length) {
+          valueChar = value[offset] ? value[offset] : "";
+          match = valueChar.match(maskRegexp);
+
+          offset++;
+        }
+
+        if (offset > value.length && this.options.placeholder === false) {
+          break;
+        }
+
+        if (match === null) {
+          result.isCompleted = false;
+          if (this.options.placeholder === true) {
             valueChar = "_";
           }
+        } else {
+          result.unmask += valueChar;
         }
       }
 
-      result += valueChar;
+      result.mask += valueChar;
     }
 
     return result;

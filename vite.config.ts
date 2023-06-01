@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
-import pkg from "./package.json";
+//import pkg from "./package.json";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,6 +12,12 @@ export default defineConfig({
       name: "Maska",
       fileName: "my-lib",
       formats: ["es", "cjs", "iife", "umd"],
+    },
+  },
+  test: {
+    environment: "jsdom",
+    coverage: {
+      reporter: ["text", "json", "html"],
     },
   },
 });

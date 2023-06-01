@@ -1,8 +1,18 @@
 <template>
   <!--<input v-input-mask v-input-mask.pattern="123" @input="change" />-->
 
-  <input v-my-mask="'###-###'" v-model="value" />
+  <input
+    v-my-mask="bindedObject"
+    data-mask="###-###"
+    data-tokens="{ 'Z': '[a-zA-Z]'}"
+    v-model="value"
+  />
 
+  <!--<input v-maska="bindedObject" data-maska="###-###" v-model="value" />-->
+  <p>{{ binding }}</p>
+
+  or {{ bindedObject.masked }} Unmasked value:
+  {{ bindedObject.unmasked }}
   <!--<div v-masked-mask>
     <input />
     <input />
@@ -16,8 +26,16 @@ export default defineComponent({
   data() {
     return {
       value: "",
+      binding: "12",
+      test: { unmasked: "1212" },
+      bindedObject: {
+        masked: "",
+        unmasked: "",
+        completed: false,
+      },
     };
   },
+  mounted() {},
   methods: {
     input() {
       console.log("from input event");
