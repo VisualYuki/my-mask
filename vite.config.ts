@@ -14,10 +14,4 @@ export default defineConfig({
       formats: ["es", "cjs", "iife", "umd"],
     },
   },
-  test: {
-    environment: "jsdom",
-    coverage: {
-      reporter: ["text", "json", "html"],
-    },
-  },
 });

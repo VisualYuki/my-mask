@@ -3,9 +3,9 @@
 
   <input
     v-my-mask="bindedObject"
-    data-mask="###-###"
-    data-tokens="{ 'Z': '[a-zA-Z]'}"
-    v-model="value"
+    data-mask="#-#---#"
+    :value="value"
+    ref="input"
   />
 
   <!--<input v-maska="bindedObject" data-maska="###-###" v-model="value" />-->
@@ -25,7 +25,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   data() {
     return {
-      value: "",
+      value: "123",
       binding: "12",
       test: { unmasked: "1212" },
       bindedObject: {
@@ -35,7 +35,11 @@ export default defineComponent({
       },
     };
   },
-  mounted() {},
+  mounted() {
+    (this.$refs.input as HTMLInputElement).addEventListener("mask", (e) => {
+      console.log(e);
+    });
+  },
   methods: {
     input() {
       console.log("from input event");

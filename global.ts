@@ -3,20 +3,31 @@ type MaskType = string;
 interface MaskOptions {
   mask?: MaskType;
   tokens?: MaskToken;
-  placeholder?: boolean;
+  //placeholder?: boolean;
   //tokensReplace?: boolean;
   //eager?: boolean;
   //reversed?: boolean;
 }
 
-interface MaskInputOptions extends MaskOptions {
-  detailCallback?: (detail: maskDetails) => void;
+interface locMaskOptions {
+  mask: MaskType;
+  tokens: MaskToken;
+  //placeholder: boolean;
 }
 
-interface maskDetails {
+interface locMaskInputOptions extends locMaskOptions {
+  detailCallback?: (detail: MaskDetails) => void;
+}
+
+interface MaskInputOptions extends MaskOptions {
+  detailCallback?: (detail: MaskDetails) => void;
+}
+
+interface MaskDetails {
   mask: string;
   unmask: string;
   isCompleted: boolean;
+  cursorPosition: number;
 }
 
 //interface MaskToken {

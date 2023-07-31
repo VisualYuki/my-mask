@@ -3,9 +3,9 @@ import { MaskInput } from "./mask-input";
 
 const masks = new WeakMap<HTMLInputElement, MaskInput>();
 
-export const vMyMask: Directive<HTMLElement, maskDetails | undefined> = (
+export const vMyMask: Directive<HTMLElement, MaskDetails | undefined> = (
   el: HTMLElement,
-  binding: DirectiveBinding<maskDetails | undefined>
+  binding: DirectiveBinding<MaskDetails | undefined>
 ) => {
   const targetInput =
     el instanceof HTMLInputElement ? el : el.querySelector("input");
@@ -22,9 +22,9 @@ export const vMyMask: Directive<HTMLElement, maskDetails | undefined> = (
 
   // set callback to update user variables in component.
   if (binding.value !== undefined) {
-    const binded: maskDetails = binding.value;
+    const binded: MaskDetails = binding.value;
 
-    const detailCallback = (detail: maskDetails): void => {
+    const detailCallback = (detail: MaskDetails): void => {
       binded.mask = detail.mask;
       binded.unmask = detail.unmask;
       binded.isCompleted = detail.isCompleted;

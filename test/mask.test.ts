@@ -3,32 +3,42 @@ import { Mask } from "../src/mask";
 
 test("undefiend mask", () => {
   let mask = new Mask({
-    mask: null,
+    mask: undefined,
   });
 
   expect(mask.mask("123-123")).toBe("123-123");
   expect(mask.mask("-123")).toBe("-123");
 });
 
-test("with placeholder", () => {
+test("###-### mask", () => {
   let mask = new Mask({
     mask: "###-###",
-    placeholder: true,
   });
 
   expect(mask.mask("123-")).toBe("123-___");
   expect(mask.mask("123-12")).toBe("123-12_");
+  expect(mask.mask("123-_12")).toBe("123-_12");
 });
 
-test("without placeholder", () => {
+test("with _ symbol mask", () => {
   let mask = new Mask({
     mask: "###-###",
-    placeholder: false,
   });
 
-  expect(mask.mask("123-")).toBe("123-");
-  expect(mask.mask("123-12")).toBe("123-12");
+  expect(mask.mask("1__-23_1")).toBe("1__-23_");
+  expect(mask.mask("123-12")).toBe("123-12_");
+  expect(mask.mask("123-_12")).toBe("123-_12");
 });
+
+//test("without placeholder", () => {
+//  let mask = new Mask({
+//    mask: "###-###",
+//    placeholder: false,
+//  });
+
+//  expect(mask.mask("123-")).toBe("123-");
+//  expect(mask.mask("123-12")).toBe("123-12");
+//});
 
 test("with tokenks", () => {
   let mask = new Mask({
@@ -73,19 +83,19 @@ test("#.# is completed", () => {
   expect(mask.isCompleted("12")).toBe(true);
 });
 
-test("#.# mask without placeholder", () => {
-  let mask = new Mask({
-    mask: "#.#",
-    placeholder: false,
-  });
+//test("#.# mask without placeholder", () => {
+//  let mask = new Mask({
+//    mask: "#.#",
+//    placeholder: false,
+//  });
 
-  expect(mask.mask("1")).toBe("1.");
-  expect(mask.mask("1.")).toBe("1.");
-  expect(mask.mask("12")).toBe("1.2");
-  expect(mask.mask("123")).toBe("1.2");
-  expect(mask.mask("a123")).toBe("1.2");
-  expect(mask.unmask("a123")).toBe("12");
-});
+//  expect(mask.mask("1")).toBe("1.");
+//  expect(mask.mask("1.")).toBe("1.");
+//  expect(mask.mask("12")).toBe("1.2");
+//  expect(mask.mask("123")).toBe("1.2");
+//  expect(mask.mask("a123")).toBe("1.2");
+//  expect(mask.unmask("a123")).toBe("12");
+//});
 
 test("(#) mask", () => {
   const mask = new Mask({ mask: "(#)" });
@@ -107,6 +117,7 @@ test("#-#-.# mask", () => {
   expect(mask.mask("123")).toBe("1-2-.3");
   expect(mask.mask("a1234")).toBe("1-2-.3");
   expect(mask.mask("&&&")).toBe("_-_-._");
+  expect(mask.mask("__1")).toBe("_-_-.1");
 
   expect(mask.unmask("a1234")).toBe("123");
 });
@@ -118,26 +129,27 @@ test("**.## mask", () => {
   expect(mask.mask("d")).toBe("d_.__");
 });
 
-test("**.## mask without placeholder", () => {
-  const mask = new Mask({ mask: "**.##", placeholder: false });
+//test("**.## mask without placeholder", () => {
+//  const mask = new Mask({ mask: "**.##", placeholder: false });
 
-  expect(mask.mask("d1")).toBe("d1.");
-  expect(mask.mask("d")).toBe("d");
-  expect(mask.unmask("d2.__")).toBe("d2");
-});
+//  expect(mask.mask("d1")).toBe("d1.");
+//  expect(mask.mask("d")).toBe("d");
+//  expect(mask.unmask("d2.__")).toBe("d2");
+//  expect(mask.mask("")).toBe("");
+//});
 
-test("#-#--# mask without placeholder", () => {
-  const mask = new Mask({ mask: "#-#--#", placeholder: false });
+//test("#-#--# mask without placeholder", () => {
+//  const mask = new Mask({ mask: "#-#--#", placeholder: false });
 
-  expect(mask.mask("aadgf1x__--1")).toBe("1-1--");
-  expect(mask.mask("aa1dgf1xcv")).toBe("1-1--");
-  expect(mask.mask("aa1xcv")).toBe("1-");
-  expect(mask.mask("12")).toBe("1-2--");
-  expect(mask.mask("123")).toBe("1-2--3");
-  expect(mask.mask("a1234")).toBe("1-2--3");
+//  expect(mask.mask("1aadgf1x__--1")).toBe("1-1--1");
+//  expect(mask.mask("aa1dgf1xcv")).toBe("1-1--");
+//  expect(mask.mask("aa1xcv")).toBe("1-");
+//  expect(mask.mask("12")).toBe("1-2--");
+//  expect(mask.mask("123")).toBe("1-2--3");
+//  expect(mask.mask("a1234")).toBe("1-2--3");
 
-  expect(mask.unmask("a1234")).toBe("123");
-});
+//  expect(mask.unmask("a1234")).toBe("123");
+//});
 
 test("0#.# mask", () => {
   const mask = new Mask({ mask: "0#.#" });
